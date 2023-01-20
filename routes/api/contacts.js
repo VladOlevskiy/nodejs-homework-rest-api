@@ -6,16 +6,20 @@ const {
   changeContact,
   getContacts,
   getContactById,
+  changeStatus,
 } = require("../../controllers/contact.controller");
+const { tryCatchWrapper } = require("../../helpers/index");
 
 router.get("/", getContacts);
 
-router.get("/:contactId", getContactById);
+router.get("/:contactId", tryCatchWrapper(getContactById));
 
-router.post("/", createContact);
+router.post("/", tryCatchWrapper(createContact));
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", tryCatchWrapper(deleteContact));
 
-router.put("/:contactId", changeContact);
+router.put("/:contactId", tryCatchWrapper(changeContact));
+
+router.patch("/:contactId/favorite", tryCatchWrapper(changeStatus));
 
 module.exports = router;
