@@ -6,12 +6,11 @@ async function auth(req, res, next) {
   const authHeader = req.headers.authorization || "";
   const [type, token] = authHeader.split(" ");
 
-  if (type !== "Bearer") {
-    throw HttpError(401, "token type is not valid");
-  }
-
   if (!token) {
     throw HttpError(401, "Not authorized");
+  }
+  if (type !== "Bearer") {
+    throw HttpError(401, "token type is not valid");
   }
 
   try {
