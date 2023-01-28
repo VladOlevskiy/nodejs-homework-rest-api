@@ -1,31 +1,38 @@
 const express = require("express");
 const router = express.Router();
-// const {
-//   createContact,
-//   deleteContact,
-//   changeContact,
-//   getContacts,
-//   getContactById,
-//   changeStatus,
-// } = require("../../controllers/contact.controller");
 const { contactsControllers } = require("../../controllers");
 const { tryCatchWrapper } = require("../../helpers/index");
+const { auth } = require("../../middlewares/auth");
 
-router.get("/", contactsControllers.getContacts);
+router.get("/", tryCatchWrapper(auth), contactsControllers.getContacts);
 
-router.get("/:contactId", tryCatchWrapper(contactsControllers.getContactById));
+router.get(
+  "/:contactId",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(contactsControllers.getContactById)
+);
 
-router.post("/", tryCatchWrapper(contactsControllers.createContact));
+router.post(
+  "/",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(contactsControllers.createContact)
+);
 
 router.delete(
   "/:contactId",
+  tryCatchWrapper(auth),
   tryCatchWrapper(contactsControllers.deleteContact)
 );
 
-router.put("/:contactId", tryCatchWrapper(contactsControllers.changeContact));
+router.put(
+  "/:contactId",
+  tryCatchWrapper(auth),
+  tryCatchWrapper(contactsControllers.changeContact)
+);
 
 router.patch(
   "/:contactId/favorite",
+  tryCatchWrapper(auth),
   tryCatchWrapper(contactsControllers.changeStatus)
 );
 
