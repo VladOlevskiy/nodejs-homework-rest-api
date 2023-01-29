@@ -12,6 +12,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use("/public", express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
@@ -37,7 +38,7 @@ app.use((error, req, res, next) => {
       message: "id is invalid",
     });
   }
-
+  console.log(error);
   return res.status(500).json({
     message: "Internal server error",
   });
