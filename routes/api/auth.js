@@ -16,5 +16,13 @@ usersRouter.get(
   tryCatchWrapper(auth),
   tryCatchWrapper(authControllers.current)
 );
+usersRouter.get(
+  "/verify/:verificationToken",
+  tryCatchWrapper(authControllers.verifyEmail)
+);
+usersRouter.post(
+  "/verify",
+  tryCatchWrapper(authControllers.repeatedVerifyEmail)
+);
 
 module.exports = { usersRouter };

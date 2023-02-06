@@ -21,6 +21,8 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
+  console.log(error);
+
   if (error.name === "ValidationError") {
     return res.status(400).json({
       message: error.message,
