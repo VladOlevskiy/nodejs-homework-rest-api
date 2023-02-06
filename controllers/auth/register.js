@@ -1,7 +1,8 @@
 const { User } = require("../../models/user");
-const { HttpError } = require("../../helpers/index.js");
+const { HttpError, sendMail } = require("../../helpers/index.js");
 const { schema } = require("../../validation/schema.users");
 const bcrypt = require("bcrypt");
+const { nanoid } = require("nanoid");
 
 async function register(req, res, next) {
   const { email, password, subscription } = req.body;
@@ -12,10 +13,20 @@ async function register(req, res, next) {
     return res.status(400).json({ message: error.message });
   }
   try {
+    const verificationToken = nanoid();
+
     const savedUser = await User.create({
       email,
       password: hashedPassword,
       subscription,
+      verificationToken,
+      verify: false,
+    });
+
+    await sendMail({
+      to: email,
+      subject: "Please confirm your email",
+      html: `<a href="http://localhost:3000/api/users/verify/${verificationToken}">Confirm your email</a>`,
     });
 
     return res.status(201).json({
